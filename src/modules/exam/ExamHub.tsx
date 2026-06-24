@@ -806,7 +806,7 @@ function HistorySection({ examSetId }: IHistorySectionProps): React.JSX.Element 
   return (
     <Stack gap="xs">
       <Text fw={600}>Attempt history</Text>
-      <Table withBorder withColumnBorders>
+      <Table withTableBorder withColumnBorders>
         <Table.Thead>
           <Table.Tr>
             <Table.Th>Date</Table.Th>
