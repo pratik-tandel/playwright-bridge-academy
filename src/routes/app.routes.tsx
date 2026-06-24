@@ -6,6 +6,7 @@ import AppLayout from '../layouts/AppLayout';
 const Dashboard = lazy(() => import('../modules/dashboard/Dashboard'));
 const LessonViewer = lazy(() => import('../modules/learning/LessonViewer'));
 const Certification = lazy(() => import('../modules/certification/Certification'));
+const ExamHub = lazy(() => import('../modules/exam/ExamHub'));
 
 function PageLoader() {
   return <LoadingOverlay visible loaderProps={{ size: 'lg', color: 'violet' }} />;
@@ -41,6 +42,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<PageLoader />}>
             <Certification />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'exam',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <ExamHub />
           </Suspense>
         ),
       },

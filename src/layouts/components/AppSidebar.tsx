@@ -1,5 +1,5 @@
 import { Stack, Text, NavLink, Progress, Badge, Group, ScrollArea, Divider, Box } from '@mantine/core';
-import { IconLayoutDashboard, IconAward, IconChevronRight, IconCheck } from '@tabler/icons-react';
+import { IconLayoutDashboard, IconAward, IconChevronRight, IconCheck, IconClipboardCheck } from '@tabler/icons-react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { modules } from '../../content';
 import { useProgressStore } from '../../stores/progress.store';
@@ -99,6 +99,19 @@ export default function AppSidebar() {
           active={location.pathname === '/certification'}
           onClick={() => navigate('/certification')}
           style={{ borderRadius: 8 }}
+        />
+
+        <NavLink
+          label="Practice Exam"
+          leftSection={<IconClipboardCheck size={16} />}
+          active={location.pathname === '/exam'}
+          onClick={() => navigate('/exam')}
+          style={{ borderRadius: 8 }}
+          rightSection={
+            <Badge size="xs" color="violet" variant="light">
+              NEW
+            </Badge>
+          }
         />
       </Stack>
     </ScrollArea>

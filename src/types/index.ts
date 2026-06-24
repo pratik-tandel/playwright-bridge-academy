@@ -75,6 +75,7 @@ export interface IUserProgress {
   quizScores: Record<string, IQuizAttempt>;
   playgroundCompletions: string[];
   certificates: Record<string, ICertificateRecord>;
+  examAttempts: IExamAttempt[];
   preferences: IUserPreferences;
   lastActivity: string;
 }
@@ -117,11 +118,26 @@ export interface ICertificateDefinition {
   level: 1 | 2 | 3;
 }
 
+export interface IExamAttempt {
+  id: string;
+  examSetId: string;
+  startedAt: string;
+  completedAt: string;
+  score: number;
+  maxScore: number;
+  percentage: number;
+  passed: boolean;
+  timeTakenSeconds: number;
+  answers: Record<string, number>;
+  categoryScores: Record<string, { score: number; maxScore: number }>;
+}
+
 export const DEFAULT_PROGRESS: IUserProgress = {
   completedLessons: [],
   quizScores: {},
   playgroundCompletions: [],
   certificates: {},
+  examAttempts: [],
   preferences: {
     colorScheme: 'dark',
     editorFontSize: 14,

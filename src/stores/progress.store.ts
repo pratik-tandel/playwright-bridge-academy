@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { IUserProgress, IQuizAttempt, ICertificateRecord, IUserPreferences, IQuizAnswerRecord } from '../types';
+import type { IUserProgress, IQuizAttempt, ICertificateRecord, IUserPreferences, IExamAttempt } from '../types';
 import { DEFAULT_PROGRESS } from '../types';
 
 interface IProgressStore extends IUserProgress {
@@ -8,6 +8,8 @@ interface IProgressStore extends IUserProgress {
   saveQuizAttempt: (attempt: IQuizAttempt) => void;
   completePlayground: (lessonId: string) => void;
   earnCertificate: (cert: ICertificateRecord) => void;
+  saveExamAttempt: (attempt: IExamAttempt) => void;
+  getBestExamAttempt: (examSetId: string) => IExamAttempt | null;
   updatePreferences: (prefs: Partial<IUserPreferences>) => void;
   resetProgress: () => void;
   getLessonProgress: (lessonId: string) => { completed: boolean; quizScore?: IQuizAttempt };
@@ -49,6 +51,22 @@ export const useProgressStore = create<IProgressStore>()(
         }));
       },
 
+      saveExamAttempt: (attempt) => {
+        set((state) => ({
+          examAttempts: [...state.examAttempts, attempt],
+          lastActivity: new Date().toISOString(),
+        }));
+      },
+
+      getBestExamAttempt: (examSetId) => {
+        const { examAttempts } = get();
+        const setAttempts = examAttempts.filter((a) => a.examSetId === examSetId);
+        if (setAttempts.length === 0) return null;
+        return setAttempts.reduce((best, attempt) =>
+          attempt.percentage > best.percentage ? attempt : best,
+        );
+      },
+
       updatePreferences: (prefs) => {
         set((state) => ({
           preferences: { ...state.preferences, ...prefs },
@@ -79,6 +97,11 @@ export const useProgressStore = create<IProgressStore>()(
     }),
     {
       name: 'pba-progress-v1',
+      merge: (persisted, current) => ({
+        ...current,
+        ...(persisted as Partial<IUserProgress>),
+        examAttempts: (persisted as Partial<IUserProgress>).examAttempts ?? [],
+      }),
     },
   ),
 );
